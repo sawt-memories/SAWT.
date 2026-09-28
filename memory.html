@@ -87,7 +87,21 @@ recordBtn.onclick = async function() {
       const blob = new Blob(chunks, {
         type: "audio/webm"
       });
+const fileName = "SAWT-0001-" + Date.now() + ".webm";
 
+supabaseClient.storage
+  .from("voice-recordings")
+  .upload(fileName, blob, {
+    contentType: "audio/webm"
+  })
+  .then(function(result) {
+    if (result.error) {
+      console.log("Upload error:", result.error);
+      return;
+    }
+
+    console.log("Voice saved successfully!");
+  });
       audio.src = URL.createObjectURL(blob);
       audio.style.display = "block";
 
