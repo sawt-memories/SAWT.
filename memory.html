@@ -56,16 +56,10 @@
 
 <script>
 
-// حطي بيانات Supabase هنا
 const SUPABASE_URL = "https://hchpjvakrntpgqpvglad.supabase.co/rest/v1/
 ";
 const SUPABASE_KEY = "sb_publishable_S4qlQGUYiYO_XTthxEhNpA_QlCpw-Ah
 ";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
 
 const recordBtn = document.getElementById("recordBtn");
 const stopBtn = document.getElementById("stopBtn");
@@ -88,11 +82,9 @@ recordBtn.onclick = async function() {
     recorder = new MediaRecorder(stream);
 
     recorder.ondataavailable = function(event) {
-
       if (event.data.size > 0) {
         chunks.push(event.data);
       }
-
     };
 
     recorder.onstop = async function() {
@@ -104,31 +96,7 @@ recordBtn.onclick = async function() {
       audio.src = URL.createObjectURL(audioBlob);
       audio.style.display = "block";
 
-      status.textContent = "جاري حفظ الذكرى...";
-
-      const fileName =
-        "SAWT-0001-" + Date.now() + ".webm";
-
-      const { error } = await supabaseClient.storage
-        .from("voice-recordings")
-        .upload(fileName, audioBlob, {
-          contentType: "audio/webm"
-        });
-
-      if (error) {
-
-        console.error(error);
-
-      
-      status.textContent =
-  "خطأ الحفظ: " + error.message;
-
-      } else {
-
-        status.textContent =
-          "تم تسجيل الذكرى وحفظها ❤️";
-
-      }
+      status.textContent = "تم التسجيل ❤️";
 
       stream.getTracks().forEach(function(track) {
         track.stop();
@@ -144,8 +112,6 @@ recordBtn.onclick = async function() {
     status.textContent = "🎙️ جاري التسجيل...";
 
   } catch (error) {
-
-    console.error(error);
 
     status.textContent =
       "الميكروفون غير متاح. اسمحي للمتصفح باستخدام الميكروفون.";
