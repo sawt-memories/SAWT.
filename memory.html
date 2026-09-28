@@ -8,8 +8,6 @@
 <title>Memory | SAWT</title>
 
 <link rel="stylesheet" href="style.css">
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -56,9 +54,6 @@
 
 <script>
 
-const SUPABASE_URL = "حطي رابط Supabase هنا";
-const SUPABASE_KEY = "حطي Publishable Key هنا";
-
 const recordBtn = document.getElementById("recordBtn");
 const stopBtn = document.getElementById("stopBtn");
 const audio = document.getElementById("audio");
@@ -80,58 +75,18 @@ recordBtn.onclick = async function() {
     recorder = new MediaRecorder(stream);
 
     recorder.ondataavailable = function(event) {
+
       if (event.data.size > 0) {
         chunks.push(event.data);
       }
+
     };
 
-    recorder.onstop = async function() {
+    recorder.onstop = function() {
 
-      const audioBlob = new Blob(chunks, {
+      const blob = new Blob(chunks, {
         type: "audio/webm"
       });
 
-      audio.src = URL.createObjectURL(audioBlob);
+      audio.src = URL.createObjectURL(blob);
       audio.style.display = "block";
-
-      status.textContent = "تم التسجيل ❤️";
-
-      stream.getTracks().forEach(function(track) {
-        track.stop();
-      });
-
-    };
-
-    recorder.start();
-
-    recordBtn.disabled = true;
-    stopBtn.disabled = false;
-
-    status.textContent = "🎙️ جاري التسجيل...";
-
-  } catch (error) {
-
-    status.textContent =
-      "الميكروفون غير متاح. اسمحي للمتصفح باستخدام الميكروفون.";
-
-  }
-
-};
-
-stopBtn.onclick = function() {
-
-  if (recorder) {
-
-    recorder.stop();
-
-    recordBtn.disabled = false;
-    stopBtn.disabled = true;
-
-  }
-
-};
-
-</script>
-
-</body>
-</html>
