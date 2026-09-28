@@ -9,7 +9,17 @@
 
 <link rel="stylesheet" href="style.css">
 </head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+const SUPABASE_URL = "https://hchpjvakrntpgqpvglad.supabase.co/rest/v1/";
+const SUPABASE_KEY = "sb_publishable_S4qlQGUYiYO_XTthxEhNpA_QlCpw-Ah";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+</script>
 <body>
 
 <main class="shell memory-page">
