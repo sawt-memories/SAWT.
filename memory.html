@@ -119,8 +119,9 @@ recordBtn.onclick = async function() {
 
         console.error(error);
 
-        status.textContent =
-          "تم التسجيل، لكن حصل خطأ أثناء الحفظ.";
+      
+      status.textContent =
+  "خطأ الحفظ: " + error.message;
 
       } else {
 
