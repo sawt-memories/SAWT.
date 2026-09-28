@@ -8,6 +8,8 @@
 <title>Memory | SAWT</title>
 
 <link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -54,6 +56,15 @@
 
 <script>
 
+// حطي بيانات Supabase هنا
+const SUPABASE_URL = "حطي رابط Supabase هنا";
+const SUPABASE_KEY = "حطي Publishable Key هنا";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
 const recordBtn = document.getElementById("recordBtn");
 const stopBtn = document.getElementById("stopBtn");
 const audio = document.getElementById("audio");
@@ -62,4 +73,98 @@ const status = document.getElementById("status");
 let recorder;
 let chunks = [];
 
-recordBtn.onclick = async
+recordBtn.onclick = async function() {
+
+  try {
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+
+    chunks = [];
+
+    recorder = new MediaRecorder(stream);
+
+    recorder.ondataavailable = function(event) {
+
+      if (event.data.size > 0) {
+        chunks.push(event.data);
+      }
+
+    };
+
+    recorder.onstop = async function() {
+
+      const audioBlob = new Blob(chunks, {
+        type: "audio/webm"
+      });
+
+      audio.src = URL.createObjectURL(audioBlob);
+      audio.style.display = "block";
+
+      status.textContent = "جاري حفظ الذكرى...";
+
+      const fileName =
+        "SAWT-0001-" + Date.now() + ".webm";
+
+      const { error } = await supabaseClient.storage
+        .from("voice-recordings")
+        .upload(fileName, audioBlob, {
+          contentType: "audio/webm"
+        });
+
+      if (error) {
+
+        console.error(error);
+
+        status.textContent =
+          "تم التسجيل، لكن حصل خطأ أثناء الحفظ.";
+
+      } else {
+
+        status.textContent =
+          "تم تسجيل الذكرى وحفظها ❤️";
+
+      }
+
+      stream.getTracks().forEach(function(track) {
+        track.stop();
+      });
+
+    };
+
+    recorder.start();
+
+    recordBtn.disabled = true;
+    stopBtn.disabled = false;
+
+    status.textContent = "🎙️ جاري التسجيل...";
+
+  } catch (error) {
+
+    console.error(error);
+
+    status.textContent =
+      "الميكروفون غير متاح. اسمحي للمتصفح باستخدام الميكروفون.";
+
+  }
+
+};
+
+stopBtn.onclick = function() {
+
+  if (recorder) {
+
+    recorder.stop();
+
+    recordBtn.disabled = false;
+    stopBtn.disabled = true;
+
+  }
+
+};
+
+</script>
+
+</body>
+  </html>
