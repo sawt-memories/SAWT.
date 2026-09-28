@@ -8,8 +8,6 @@
 <title>Memory | SAWT</title>
 
 <link rel="stylesheet" href="style.css">
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -35,11 +33,9 @@
       <i></i><i></i><i></i><i></i><i></i>
     </div>
 
-    <h1 id="title">
-      أول ذكرى من صوت
-    </h1>
+    <h1>أول ذكرى من صوت</h1>
 
-    <p id="message">
+    <p>
       سجّل صوتًا لتحفظ هذه الذكرى.
     </p>
 
@@ -59,12 +55,12 @@
 
       <div>
         <span>Created</span>
-        <strong id="date">28 Sep 2026</strong>
+        <strong>28 Sep 2026</strong>
       </div>
 
       <div>
         <span>Memory</span>
-        <strong id="memoryNumber">SAWT-0001</strong>
+        <strong>SAWT-0001</strong>
       </div>
 
     </div>
@@ -72,7 +68,7 @@
   </section>
 
   <p class="privacy">
-    التسجيل يتم داخل المتصفح ويتم حفظه في مساحة التخزين الخاصة بالمشروع.
+    هذه صفحة تجريبية. التسجيل يتم داخل المتصفح على جهازك.
   </p>
 
   <footer>
@@ -81,50 +77,29 @@
 
 </main>
 
-
 <script>
 
-/* =========================
-   SUPABASE
-   ========================= */
+const params =
+new URLSearchParams(location.search);
 
-const SUPABASE_URL = "https://hchpjvakrntpgqpvglad.supabase.co/rest/v1/
-";
+const id =
+params.get("id") || "SAWT-0001";
 
-const SUPABASE_KEY = "sb_publishable_S4qlQGUYiYO_XTthxEhNpA_QlCpw-Ah
-";
-
-
-const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+document.getElementById("memoryId")
+.textContent = id;
 
 
-/* =========================
-   MEMORY ID
-   ========================= */
+const recordBtn =
+document.getElementById("recordBtn");
 
-const params = new URLSearchParams(location.search);
+const stopBtn =
+document.getElementById("stopBtn");
 
-const id = params.get("id") || "SAWT-0001";
+const audio =
+document.getElementById("audio");
 
-document.getElementById("memoryId").textContent = id;
-
-document.getElementById("memoryNumber").textContent = id;
-
-
-/* =========================
-   RECORDING
-   ========================= */
-
-const recordBtn = document.getElementById("recordBtn");
-
-const stopBtn = document.getElementById("stopBtn");
-
-const audio = document.getElementById("audio");
-
-const status = document.getElementById("status");
+const status =
+document.getElementById("status");
 
 
 let mediaRecorder;
@@ -132,143 +107,9 @@ let mediaRecorder;
 let audioChunks = [];
 
 
-/* =========================
-   START RECORDING
-   ========================= */
-
 recordBtn.addEventListener("click", async () => {
 
   try {
 
     const stream =
-      await navigator.mediaDevices.getUserMedia({
-        audio: true
-      });
-
-
-    audioChunks = [];
-
-
-    mediaRecorder =
-      new MediaRecorder(stream);
-
-
-    mediaRecorder.ondataavailable = (event) => {
-
-      if (event.data.size > 0) {
-
-        audioChunks.push(event.data);
-
-      }
-
-    };
-
-
-    mediaRecorder.onstop = async () => {
-
-      const audioBlob =
-        new Blob(audioChunks, {
-          type: "audio/webm"
-        });
-
-
-      const audioURL =
-        URL.createObjectURL(audioBlob);
-
-
-      audio.src = audioURL;
-
-      audio.style.display = "block";
-
-
-      status.textContent =
-        "جاري حفظ الذكرى...";
-
-
-      /* =========================
-         UPLOAD TO SUPABASE
-         ========================= */
-
-      const fileName =
-        id + "-" + Date.now() + ".webm";
-
-
-      const { error } =
-        await supabaseClient.storage
-        .from("voice-recordings")
-        .upload(fileName, audioBlob, {
-          contentType: "audio/webm"
-        });
-
-
-      if (error) {
-
-        console.error(error);
-
-        status.textContent =
-          "تم التسجيل، لكن لم يتم حفظ الملف.";
-
-      } else {
-
-        status.textContent =
-          "تم تسجيل وحفظ الذكرى ❤️";
-
-      }
-
-
-      stream
-        .getTracks()
-        .forEach(track => track.stop());
-
-    };
-
-
-    mediaRecorder.start();
-
-
-    recordBtn.disabled = true;
-
-    stopBtn.disabled = false;
-
-
-    status.textContent =
-      "🎙️ جاري التسجيل...";
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    status.textContent =
-      "لم يتم السماح باستخدام الميكروفون.";
-
-  }
-
-});
-
-
-/* =========================
-   STOP RECORDING
-   ========================= */
-
-stopBtn.addEventListener("click", () => {
-
-  if (
-    mediaRecorder &&
-    mediaRecorder.state !== "inactive"
-  ) {
-
-    mediaRecorder.stop();
-
-    recordBtn.disabled = false;
-
-    stopBtn.disabled = true;
-
-  }
-
-});
-
-</script>
-
-</body>
-</html>
+    await navigator.mediaDevices.getUser
