@@ -89,18 +89,22 @@ recordBtn.onclick = async function() {
       });
 const fileName = "SAWT-0001-" + Date.now() + ".webm";
 
+status.textContent = "جاري حفظ الذكرى...";
+
 supabaseClient.storage
   .from("voice-recordings")
   .upload(fileName, blob, {
     contentType: "audio/webm"
   })
   .then(function(result) {
+
     if (result.error) {
-      console.log("Upload error:", result.error);
+      status.textContent = "لم يتم حفظ التسجيل ❌";
+      console.log(result.error);
       return;
     }
 
-    console.log("Voice saved successfully!");
+    status.textContent = "تم حفظ الذكرى في SAWT ❤️";
   });
       audio.src = URL.createObjectURL(blob);
       audio.style.display = "block";
