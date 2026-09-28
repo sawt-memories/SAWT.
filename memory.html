@@ -14,20 +14,15 @@
 
 <main class="shell memory-page">
 
-  <div class="brand">
-    صوت <span>|</span> SAWT
-  </div>
+  <div class="brand">صوت <span>|</span> SAWT</div>
 
   <section class="memory-card">
 
     <div class="small">A MEMORY TO KEEP</div>
 
-    <div class="memory-id" id="memoryId">
-      SAWT-0001
-    </div>
+    <div class="memory-id">SAWT-0001</div>
 
-    <div class="wave" aria-hidden="true">
-      <i></i><i></i><i></i><i></i><i></i>
+    <div class="wave">
       <i></i><i></i><i></i><i></i><i></i>
       <i></i><i></i><i></i><i></i><i></i>
       <i></i><i></i><i></i><i></i><i></i>
@@ -35,15 +30,13 @@
 
     <h1>أول ذكرى من صوت</h1>
 
-    <p>
-      سجّل صوتًا لتحفظ هذه الذكرى.
-    </p>
+    <p>سجّل صوتًا لتحفظ هذه الذكرى.</p>
 
-    <button id="recordBtn" class="button" type="button">
+    <button id="recordBtn" class="button">
       🎙️ ابدأ التسجيل
     </button>
 
-    <button id="stopBtn" class="button" type="button" disabled>
+    <button id="stopBtn" class="button" disabled>
       ⏹️ إيقاف التسجيل
     </button>
 
@@ -51,25 +44,7 @@
 
     <p id="status"></p>
 
-    <div class="meta">
-
-      <div>
-        <span>Created</span>
-        <strong>28 Sep 2026</strong>
-      </div>
-
-      <div>
-        <span>Memory</span>
-        <strong>SAWT-0001</strong>
-      </div>
-
-    </div>
-
   </section>
-
-  <p class="privacy">
-    هذه صفحة تجريبية. التسجيل يتم داخل المتصفح على جهازك.
-  </p>
 
   <footer>
     SAWT — Some voices are worth keeping.
@@ -79,37 +54,79 @@
 
 <script>
 
-const params =
-new URLSearchParams(location.search);
+const recordBtn = document.getElementById("recordBtn");
+const stopBtn = document.getElementById("stopBtn");
+const audio = document.getElementById("audio");
+const status = document.getElementById("status");
 
-const id =
-params.get("id") || "SAWT-0001";
+let recorder;
+let chunks = [];
 
-document.getElementById("memoryId")
-.textContent = id;
-
-
-const recordBtn =
-document.getElementById("recordBtn");
-
-const stopBtn =
-document.getElementById("stopBtn");
-
-const audio =
-document.getElementById("audio");
-
-const status =
-document.getElementById("status");
-
-
-let mediaRecorder;
-
-let audioChunks = [];
-
-
-recordBtn.addEventListener("click", async () => {
+recordBtn.onclick = async function() {
 
   try {
 
-    const stream =
-    await navigator.mediaDevices.getUser
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+
+    chunks = [];
+
+    recorder = new MediaRecorder(stream);
+
+    recorder.ondataavailable = function(event) {
+      if (event.data.size > 0) {
+        chunks.push(event.data);
+      }
+    };
+
+    recorder.onstop = function() {
+
+      const blob = new Blob(chunks, {
+        type: "audio/webm"
+      });
+
+      audio.src = URL.createObjectURL(blob);
+      audio.style.display = "block";
+
+      status.textContent = "تم تسجيل الذكرى ❤️";
+
+      stream.getTracks().forEach(function(track) {
+        track.stop();
+      });
+
+    };
+
+    recorder.start();
+
+    recordBtn.disabled = true;
+    stopBtn.disabled = false;
+
+    status.textContent = "🎙️ جاري التسجيل...";
+
+  } catch (error) {
+
+    status.textContent =
+      "الميكروفون غير متاح. اسمحي للمتصفح باستخدام الميكروفون.";
+
+  }
+
+};
+
+stopBtn.onclick = function() {
+
+  if (recorder) {
+
+    recorder.stop();
+
+    recordBtn.disabled = false;
+    stopBtn.disabled = true;
+
+  }
+
+};
+
+</script>
+
+</body>
+</html>
