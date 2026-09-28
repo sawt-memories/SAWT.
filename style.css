@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;1,500&display=swap');
+
+:root{
+  --bg:#11100f; --card:#191817; --text:#f5f0e8; --muted:#a9a197;
+  --gold:#c8a96b; --line:rgba(255,255,255,.11);
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 0,#29241d 0,#11100f 42%);color:var(--text);font-family:Cairo,Arial,sans-serif;min-height:100vh}
+.shell{width:min(92%,620px);margin:auto;min-height:100vh;display:flex;flex-direction:column;padding:28px 0 20px}
+.brand{font-size:20px;font-weight:700;letter-spacing:1px}
+.brand span{color:var(--gold);margin:0 5px}
+.hero{margin:auto 0;padding:70px 0}
+.eyebrow,.small{font-size:11px;letter-spacing:2.5px;color:var(--gold);font-weight:600}
+h1{font-size:clamp(46px,12vw,78px);line-height:1.05;margin:18px 0}
+h1 em{font-family:"Playfair Display",serif;color:var(--gold);font-weight:500}
+.hero p{color:var(--muted);font-size:16px;max-width:430px;line-height:2}
+.button{display:inline-block;margin-top:25px;background:var(--text);color:#111;text-decoration:none;padding:13px 24px;border-radius:999px;font-weight:700}
+footer{color:#756f68;font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+.memory-page{align-items:stretch}
+.memory-card{background:linear-gradient(145deg,#1d1b19,#151413);border:1px solid var(--line);border-radius:28px;padding:34px 25px;margin:auto 0;box-shadow:0 25px 70px rgba(0,0,0,.35)}
+.memory-id{color:#77716a;font-size:11px;letter-spacing:2px;margin-top:8px;direction:ltr;text-align:right}
+.memory-card h1{font-size:30px;margin:28px 0 8px}
+.memory-card p{color:var(--muted);line-height:1.9;margin-top:0}
+.wave{height:90px;display:flex;align-items:center;justify-content:center;gap:4px;margin:28px 0}
+.wave i{display:block;width:3px;border-radius:99px;background:var(--gold);height:var(--h,34px);opacity:.9}
+.wave i:nth-child(3n){--h:65px}.wave i:nth-child(4n){--h:48px}.wave i:nth-child(5n){--h:25px}.wave i:nth-child(7n){--h:72px}.wave i:nth-child(9n){--h:42px}
+audio{width:100%;margin:8px 0 25px}
+.meta{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);padding-top:18px;gap:12px}
+.meta div{display:flex;flex-direction:column;gap:3px}.meta span{font-size:10px;color:#77716a;text-transform:uppercase;letter-spacing:1.5px}.meta strong{font-size:13px}
+.privacy{font-size:11px;color:#6e6963;line-height:1.8;margin:18px 3px}
+@media(max-width:480px){.shell{padding-top:22px}.memory-card{padding:27px 20px;border-radius:22px}}

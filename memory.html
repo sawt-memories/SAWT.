@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memory | SAWT</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="shell memory-page">
+  <div class="brand">صوت <span>|</span> SAWT</div>
+
+  <section class="memory-card">
+    <div class="small">A MEMORY TO KEEP</div>
+    <div class="memory-id" id="memoryId">SAWT-0001</div>
+    <div class="wave" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+
+    <h1 id="title">أول ذكرى من صوت</h1>
+    <p id="message">اضغط تشغيل واسمع الذكرى.</p>
+
+    <audio id="audio" controls preload="none">
+      <!-- ضع رابط ملف الصوت التجريبي هنا في src -->
+    </audio>
+
+    <div class="meta">
+      <div><span>Created</span><strong id="date">28 Sep 2026</strong></div>
+      <div><span>Memory</span><strong>SAWT-0001</strong></div>
+    </div>
+  </section>
+
+  <p class="privacy">هذه صفحة تجريبية. في النسخة التجارية سيتم تخزين التسجيلات في مساحة خاصة، ولن يظهر رابط ملف الصوت مباشرة للزائر.</p>
+  <footer>SAWT — Some voices are worth keeping.</footer>
+</main>
+<script>
+const params = new URLSearchParams(location.search);
+const id = params.get("id") || "SAWT-0001";
+document.getElementById("memoryId").textContent = id;
+</script>
+</body>
+</html>
