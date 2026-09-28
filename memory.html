@@ -89,6 +89,14 @@ recordBtn.onclick = async function() {
       const blob = new Blob(chunks, {
         type: "audio/webm"
       });
+      downloadBtn.style.display = "block";
+
+downloadBtn.onclick = function() {
+  const link = document.createElement("a");
+  link.href = audio.src;
+  link.download = "SAWT-memory.webm";
+  link.click();
+};
 const fileName = "SAWT-0001-" + Date.now() + ".webm";
 
 status.textContent = "جاري حفظ الذكرى...";
