@@ -62,31 +62,4 @@ const status = document.getElementById("status");
 let recorder;
 let chunks = [];
 
-recordBtn.onclick = async function() {
-
-  try {
-
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: true
-    });
-
-    chunks = [];
-
-    recorder = new MediaRecorder(stream);
-
-    recorder.ondataavailable = function(event) {
-
-      if (event.data.size > 0) {
-        chunks.push(event.data);
-      }
-
-    };
-
-    recorder.onstop = function() {
-
-      const blob = new Blob(chunks, {
-        type: "audio/webm"
-      });
-
-      audio.src = URL.createObjectURL(blob);
-      audio.style.display = "block";
+recordBtn.onclick = async
