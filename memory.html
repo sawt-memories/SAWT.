@@ -8,8 +8,6 @@
 <title>Memory | SAWT</title>
 
 <link rel="stylesheet" href="style.css">
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -56,15 +54,6 @@
 
 <script>
 
-// حطي بيانات Supabase هنا
-const SUPABASE_URL = "حطي رابط Supabase هنا";
-const SUPABASE_KEY = "حطي Publishable Key هنا";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
 const recordBtn = document.getElementById("recordBtn");
 const stopBtn = document.getElementById("stopBtn");
 const audio = document.getElementById("audio");
@@ -93,39 +82,16 @@ recordBtn.onclick = async function() {
 
     };
 
-    recorder.onstop = async function() {
+    recorder.onstop = function() {
 
-      const audioBlob = new Blob(chunks, {
+      const blob = new Blob(chunks, {
         type: "audio/webm"
       });
 
-      audio.src = URL.createObjectURL(audioBlob);
+      audio.src = URL.createObjectURL(blob);
       audio.style.display = "block";
 
-      status.textContent = "جاري حفظ الذكرى...";
-
-      const fileName =
-        "SAWT-0001-" + Date.now() + ".webm";
-
-      const { error } = await supabaseClient.storage
-        .from("voice-recordings")
-        .upload(fileName, audioBlob, {
-          contentType: "audio/webm"
-        });
-
-      if (error) {
-
-        console.error(error);
-
-        status.textContent =
-          "تم التسجيل، لكن حصل خطأ أثناء الحفظ.";
-
-      } else {
-
-        status.textContent =
-          "تم تسجيل الذكرى وحفظها ❤️";
-
-      }
+      status.textContent = "تم تسجيل الذكرى ❤️";
 
       stream.getTracks().forEach(function(track) {
         track.stop();
@@ -141,8 +107,6 @@ recordBtn.onclick = async function() {
     status.textContent = "🎙️ جاري التسجيل...";
 
   } catch (error) {
-
-    console.error(error);
 
     status.textContent =
       "الميكروفون غير متاح. اسمحي للمتصفح باستخدام الميكروفون.";
@@ -167,4 +131,4 @@ stopBtn.onclick = function() {
 </script>
 
 </body>
-  </html>
+</html>
