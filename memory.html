@@ -8,6 +8,8 @@
 <title>Memory | SAWT</title>
 
 <link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -54,6 +56,17 @@
 
 <script>
 
+// حطي بيانات Supabase هنا
+const SUPABASE_URL = "https://hchpjvakrntpgqpvglad.supabase.co/rest/v1/
+";
+const SUPABASE_KEY = "sb_publishable_S4qlQGUYiYO_XTthxEhNpA_QlCpw-Ah
+";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
 const recordBtn = document.getElementById("recordBtn");
 const stopBtn = document.getElementById("stopBtn");
 const audio = document.getElementById("audio");
@@ -75,21 +88,46 @@ recordBtn.onclick = async function() {
     recorder = new MediaRecorder(stream);
 
     recorder.ondataavailable = function(event) {
+
       if (event.data.size > 0) {
         chunks.push(event.data);
       }
+
     };
 
-    recorder.onstop = function() {
+    recorder.onstop = async function() {
 
-      const blob = new Blob(chunks, {
+      const audioBlob = new Blob(chunks, {
         type: "audio/webm"
       });
 
-      audio.src = URL.createObjectURL(blob);
+      audio.src = URL.createObjectURL(audioBlob);
       audio.style.display = "block";
 
-      status.textContent = "تم تسجيل الذكرى ❤️";
+      status.textContent = "جاري حفظ الذكرى...";
+
+      const fileName =
+        "SAWT-0001-" + Date.now() + ".webm";
+
+      const { error } = await supabaseClient.storage
+        .from("voice-recordings")
+        .upload(fileName, audioBlob, {
+          contentType: "audio/webm"
+        });
+
+      if (error) {
+
+        console.error(error);
+
+        status.textContent =
+          "تم التسجيل، لكن حصل خطأ أثناء الحفظ.";
+
+      } else {
+
+        status.textContent =
+          "تم تسجيل الذكرى وحفظها ❤️";
+
+      }
 
       stream.getTracks().forEach(function(track) {
         track.stop();
@@ -105,6 +143,8 @@ recordBtn.onclick = async function() {
     status.textContent = "🎙️ جاري التسجيل...";
 
   } catch (error) {
+
+    console.error(error);
 
     status.textContent =
       "الميكروفون غير متاح. اسمحي للمتصفح باستخدام الميكروفون.";
